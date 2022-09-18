@@ -9,6 +9,9 @@ define(["require", "exports"], function (require, exports) {
      */
     class DOMLoc {
         constructor() {
+            /**
+             * The XML document that was download and processed.
+             */
             this.root = null;
         }
         static LoadXMLURLInto(svgUrl, DOMDst) {

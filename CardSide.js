@@ -39,7 +39,7 @@ define(["require", "exports", "./SVGUtils"], function (require, exports, SVGUtil
         }
         /**
          * Add SVG elements to the card side.
-         * @param newNodes
+         * @param newNodes Add additional nodes to the card's contents.
          */
         AppendNodes(newNodes) {
             this.nodes.push(...newNodes);
@@ -82,7 +82,7 @@ define(["require", "exports", "./SVGUtils"], function (require, exports, SVGUtil
         }
         /**
          * Set the node contents.
-         * @param newNodes
+         * @param newNodes The nodes to set as the card's contents.
          */
         CreateFromNodes(newNodes) {
             this.nodes = newNodes;
@@ -114,8 +114,13 @@ define(["require", "exports", "./SVGUtils"], function (require, exports, SVGUtil
             }
             return extraNodes;
         }
-        // TODO: Change name
-        static FindSetTheme(nodes, themeName) {
+        /**
+         * In a given set of SVG elements, find nodes that should show the card theme, and set it to a specified value.
+         * @param nodes The collection of nodes that may contain the theme node.
+         * @param themeName The value to set the text of the theme.
+         * @returns True if a node was found and set. Else, false.
+         */
+        static FindAndSetTheme(nodes, themeName) {
             if (!nodes)
                 return false;
             let toProc = [...nodes];

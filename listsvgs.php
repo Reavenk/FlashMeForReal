@@ -1,5 +1,12 @@
 <?php
 # List out all the contents of a directory as a json.
+# 
+# Type: GET
+# Params:
+# 	- subpath
+#		Folder 
+#
+# Response: JSON showing all of the SVGS in the specified folder.
 
 header('Content-Type: application/json');
 

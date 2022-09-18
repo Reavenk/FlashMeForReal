@@ -4,16 +4,54 @@ import { CardSegTemplate } from "./CardSegTemplate";
 import { SVGUtils } from "./SVGUtils";
 import { CardSide } from "./CardSide";
 
+/**
+ * The application session and utilities.
+ */
 export class CardApp
 {
-    letterPage          : PageSettings|null  = null;
+    /**
+     * The page settings to use in the application.
+     */
+    pageSettings          : PageSettings|null  = null;
+
+    /**
+     * The SVG to use as the blank page being rendered to. This may contain
+     * extra details such as Inkscape guides, or full-page watermarks.
+     * 
+     * The document should be make to match the dimensions of pageSettings.
+     */
     templateBlank       : DOMLoc|null   = null;
+
+    /**
+     * The SVG to use as the blank page being rendered to. This may contain
+     * extra details such as Inkscape guides, or full-page watermarks.
+     * 
+     * The document should be make to match the dimensions of pageSettings.
+     * 
+     * This version explicitly visible lines to show the card boundaries, to
+     * create a version where the user can manually cut the cards apart.
+     */
     templateBlankLined 	: DOMLoc|null   = null;
+
+    /**
+     * The template for the questions side of a flash card.
+     */
     cardQFace			: CardSide|null = null;
+
+    /**
+     * The template for the answer side of a flash card.
+     */
     cardAFace			: CardSide|null = null;
+
+    /**
+     * The template for displaying the theme in the question side of a flashcard.
+     */
     cardTheme			: CardSide|null = null;
 
-    InitializeDownloadAssets()
+    /**
+     * Download hardcoded assets from the server.
+     */
+    InitializeDownloadAssets(): void
     {
         this.templateBlank = new DOMLoc();
         this.templateBlankLined = new DOMLoc();
@@ -27,17 +65,28 @@ export class CardApp
         CardSide.LoadXMLURLInto("Card_AFace.svg", this.cardAFace);
         CardSide.LoadXMLURLInto("Card_Theme.svg", this.cardTheme);
 
-        this.letterPage = PageSettings.defaultLetter;
+        this.pageSettings = PageSettings.defaultLetter;
     }
 
+    /**
+     * Given a list of flashcard data, generate the SVGs of the double-sides printable pages.
+     * @param cardsToComp The flashcard data to compile.
+     * @returns The final SVG pages. The array will always be even as Q/A should be printed double-sided so they come in pairs.
+     */
     GeneratePages(cardsToComp : [[string, CardSegTemplate]]) : Array<Document>
     {
-        if(!this.letterPage)
+        if(!this.pageSettings)
             throw new Error("GeneratePages missing expected page layout.");
 
-        return this.GeneratePagesEx(cardsToComp, this.letterPage);
+        return this.GeneratePagesEx(cardsToComp, this.pageSettings);
     }
 
+    /**
+     * Given a list of flashcard data, generate the SVGs of the double-sides printable pages.
+     * 
+     * See GeneratePages() for more information on parameters.
+     * @param pageSettings The page settings to use.
+     */
     GeneratePagesEx(
         cardsToComp : [[string, CardSegTemplate]], 
         pageSettings : PageSettings) : Array<Document>
@@ -119,7 +168,7 @@ export class CardApp
                         if(!tempNodeClones)
                             continue;
 
-                        CardSide.FindSetTheme(tempNodeClones, cardTemp.theme);
+                        CardSide.FindAndSetTheme(tempNodeClones, cardTemp.theme);
                     }
                 }
                 
@@ -156,6 +205,11 @@ export class CardApp
         return pageRet;
     }
 
+    /**
+     * Given SVG documents, compile them into a string for PDFConversion.php.
+     * @param docs The documents to compile as the string payload.
+     * @returns The string payload that can be sent for PDFConversion.php
+     */
     static MergeDocumentsIntoString(docs : Array<Document>) : string
     {
         let docDumps : Array<string> = [];
@@ -167,6 +221,12 @@ export class CardApp
         return CardApp.CreateMergedPayloadFromString(docDumps)
     }
 
+    /**
+     * Given an array of strings representing seperate text files, compile them
+     * into one concatenated string that can be processed by PDFConversion.php.
+     * @param toContat The contents of the text files to concatenate.
+     * @returns The string payload for PDFConversion.php.
+     */
     static CreateMergedPayloadFromString(toContat : Array<string>) : string
     {
         let retCombined : string = "";
@@ -185,6 +245,11 @@ export class CardApp
         return retCombined;
     }
 
+    /**
+     * Given a blob, set the browser to download it as a file.
+     * @param filename The filename the browser should recommend saving the file as.
+     * @param data A blob with the file content.
+     */
     static DoDownload(filename: string, data: Blob)
     {
         let a : HTMLAnchorElement = document.createElement("a");
@@ -200,6 +265,11 @@ export class CardApp
         window.URL.revokeObjectURL(url);
     }
 
+    /**
+     * Utility function to convert an SVG string to an XML document.
+     * @param svgAsString The string representation of the SVG document.
+     * @returns The generated XML document.
+     */
     static StringToSVG(svgAsString : string) : Document
     {
         let parser : DOMParser = new DOMParser();
@@ -207,12 +277,17 @@ export class CardApp
         return xmlDoc;
     }
 
+    /**
+     * Utility function to parse an SVG string file containing the data for a flashcard.
+     * @param svgAsString The SVG contents of a QA flashcard.
+     * @returns The CardSegTemplate, representing the flashcard data.
+     */
     ParseImportedCard(svgAsString : string) : CardSegTemplate
     {
-        if(!this.letterPage)
+        if(!this.pageSettings)
             throw new Error("ParseImportedCard missing expected letter page.");
 
         let svgDoc : Document = CardApp.StringToSVG(svgAsString);
-        return new CardSegTemplate(svgDoc, this.letterPage.cardWidth);
+        return new CardSegTemplate(svgDoc, this.pageSettings.cardWidth);
     }
 }

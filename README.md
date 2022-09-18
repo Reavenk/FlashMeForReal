@@ -11,6 +11,8 @@ For example generated PDFS, see [here](https://pixeleuphoria.com/blog/index.php/
 * Pages come in pair and are expected to be printed double-sided.
 * Perforated stock cards are suggested. Make sure your printer can handle thick paper.
 
+Note that some of the PHP files expect the [Cards](https://github.com/Reavenk/Cards) submodule to be checked out.
+
 # License
 
 MIT License

@@ -1,0 +1,4 @@
+* [ ] Look into importing Anke cards
+* [ ] Look into a template system where a plain string can be specified for questions and answers - and the text correctly wraps vertically and horizontally.
+* [ ] Look into SVG elements with transforms being compiled correctly. The easiest solution will probably require applying the transform and throwing the transform data away.
+* [ ] For 2D coordinates, use a Typescript typed class instead of a 2 element number array.

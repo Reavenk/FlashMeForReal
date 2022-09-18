@@ -1,4 +1,9 @@
 <?php 
+# UNFINISHED:
+#
+# Eventually it's going to be a location that will take an entire
+# directory's worth of cards and make it into a flashcard session
+# in the browser.
 ?>
 
 <html>

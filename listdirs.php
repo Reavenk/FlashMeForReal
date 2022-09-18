@@ -1,7 +1,15 @@
 <?php
-/*
-List all the folder and any extra metadata in the directory.
-*/
+#
+# List all the folder and any extra metadata in the directory.
+# 
+# Type: GET
+# Params: 
+#	- subpath
+#		The folder to get the metadata of.
+#	
+# Response: All the directories, as well as their metadata if
+#	they have any.
+
 header('Content-Type: application/json');
 
 $ar = array();

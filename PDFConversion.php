@@ -6,7 +6,7 @@
 # 2. Extract those files and save them as temporary files, but remember the order.
 # 3. Run command line tool to merge the SVGS into a pdf.
 # 4. Load PDF file binary and send back as payload.
-
+#
 # The request payload format is a long string, with the SVG files and some other
 # data combined, but separated with a pipe (|) character.
 # 
@@ -16,6 +16,12 @@
 # as this value should reflect the NUMBER OF BYTES AND NOT THE CHARACTER COUNT as
 # character length of a string will probably be invalid for extraction when we take
 # into account Unicode support.
+#
+# Type : POST
+# Payload: 
+#	string - the concatenated SVG documents. See above for more information.
+#	
+# Response: The SVGs, converted into a multi-page PDF.
 
 error_reporting(E_ERROR | E_PARSE);
 chdir(__DIR__);

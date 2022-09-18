@@ -4,6 +4,11 @@
 	</head>
 	<body>
 <?php
+# List all directories, with links to go to their specific splays.
+#
+# Type: GET
+# Response: HTML webpage, with a directory of all card pages.
+
 $subpath = "/Cards/";
 echo(getcwd().$subpath);
 $indir = scandir(getcwd().$subpath);

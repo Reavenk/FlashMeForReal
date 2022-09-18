@@ -7,6 +7,10 @@ import { CardSide } from "./CardSide";
  */
 export class DOMLoc
 {
+
+	/**
+	 * The XML document that was download and processed.
+	 */	
 	root : null | Document = null;
 
 	constructor()

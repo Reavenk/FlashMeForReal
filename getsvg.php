@@ -1,5 +1,15 @@
 <?php
 
+# Allows pages to get SVG files from an API call instead of by referencing
+# the resource directly. 
+#
+# Type: GET
+# Params:
+# 	- subpath
+# 		File to send as response.
+#
+# Response: The requested SVG file.
+
 function endsWith($haystack, $needle) {
     return substr_compare($haystack, $needle, -strlen($needle)) === 0;
 }

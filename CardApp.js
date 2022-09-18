@@ -2,15 +2,39 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CardApp = void 0;
+    /**
+     *
+     */
     class CardApp {
         constructor() {
+            /**
+             *
+             */
             this.letterPage = null;
+            /**
+             *
+             */
             this.templateBlank = null;
+            /**
+             *
+             */
             this.templateBlankLined = null;
+            /**
+             *
+             */
             this.cardQFace = null;
+            /**
+             *
+             */
             this.cardAFace = null;
+            /**
+             *
+             */
             this.cardTheme = null;
         }
+        /**
+         *
+         */
         InitializeDownloadAssets() {
             this.templateBlank = new DOMLoc_1.DOMLoc();
             this.templateBlankLined = new DOMLoc_1.DOMLoc();
@@ -24,11 +48,22 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
             CardSide_1.CardSide.LoadXMLURLInto("Card_Theme.svg", this.cardTheme);
             this.letterPage = PageSettings_1.PageSettings.defaultLetter;
         }
+        /**
+         *
+         * @param cardsToComp
+         * @returns
+         */
         GeneratePages(cardsToComp) {
             if (!this.letterPage)
                 throw new Error("GeneratePages missing expected page layout.");
             return this.GeneratePagesEx(cardsToComp, this.letterPage);
         }
+        /**
+         *
+         * @param cardsToComp
+         * @param pageSettings
+         * @returns
+         */
         GeneratePagesEx(cardsToComp, pageSettings) {
             if (!this.templateBlankLined || !this.templateBlank)
                 throw Error("Attempting to generate pages undefined templates.");
@@ -85,7 +120,7 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
                             let tempNodeClones = this.cardTheme.CloneInto(pageQ, layerQ, tileOfsQ);
                             if (!tempNodeClones)
                                 continue;
-                            CardSide_1.CardSide.FindSetTheme(tempNodeClones, cardTemp.theme);
+                            CardSide_1.CardSide.FindAndSetTheme(tempNodeClones, cardTemp.theme);
                         }
                     }
                     for (let dupIt = 0; dupIt < cardTemp.qSide.length; ++dupIt) {
@@ -113,6 +148,11 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
             }
             return pageRet;
         }
+        /**
+         *
+         * @param docs
+         * @returns
+         */
         static MergeDocumentsIntoString(docs) {
             let docDumps = [];
             for (let i = 0; i < docs.length; ++i) {
@@ -121,6 +161,11 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
             }
             return CardApp.CreateMergedPayloadFromString(docDumps);
         }
+        /**
+         *
+         * @param toContat
+         * @returns
+         */
         static CreateMergedPayloadFromString(toContat) {
             let retCombined = "";
             retCombined += toContat.length.toString() + "|";
@@ -135,6 +180,11 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
             }
             return retCombined;
         }
+        /**
+         *
+         * @param filename
+         * @param data
+         */
         static DoDownload(filename, data) {
             let a = document.createElement("a");
             if (!a)
@@ -147,11 +197,21 @@ define(["require", "exports", "./PageSettings", "./DOMLoc", "./CardSegTemplate",
             a.click();
             window.URL.revokeObjectURL(url);
         }
+        /**
+         *
+         * @param svgAsString
+         * @returns
+         */
         static StringToSVG(svgAsString) {
             let parser = new DOMParser();
             let xmlDoc = parser.parseFromString(svgAsString, "text/xml");
             return xmlDoc;
         }
+        /**
+         *
+         * @param svgAsString
+         * @returns
+         */
         ParseImportedCard(svgAsString) {
             if (!this.letterPage)
                 throw new Error("ParseImportedCard missing expected letter page.");

@@ -48,7 +48,7 @@ export class CardSide
 	
 	/**
 	 * Add SVG elements to the card side.
-	 * @param newNodes 
+	 * @param newNodes Add additional nodes to the card's contents.
 	 */
 	AppendNodes(newNodes : Array<Element>)
 	{
@@ -105,7 +105,7 @@ export class CardSide
 	
 	/**
 	 * Set the node contents.
-	 * @param newNodes 
+	 * @param newNodes The nodes to set as the card's contents.
 	 */
 	CreateFromNodes(newNodes : Array<Element>)
 	{
@@ -149,8 +149,13 @@ export class CardSide
 		return extraNodes;
 	}
 
-	// TODO: Change name
-	static FindSetTheme(nodes : Array<Element>, themeName : string) : boolean
+	/**
+	 * In a given set of SVG elements, find nodes that should show the card theme, and set it to a specified value.
+	 * @param nodes The collection of nodes that may contain the theme node.
+	 * @param themeName The value to set the text of the theme.
+	 * @returns True if a node was found and set. Else, false.
+	 */
+	static FindAndSetTheme(nodes : Array<Element>, themeName : string) : boolean
 	{
 		if(!nodes)
 			return false;
