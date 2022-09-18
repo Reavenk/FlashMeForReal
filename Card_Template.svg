@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="7in"
+   height="2in"
+   viewBox="0 0 177.80001 50.800001"
+   version="1.1"
+   id="svg3442"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="Card_Template.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3444"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="in"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="1.4645623"
+     inkscape:cx="213.37433"
+     inkscape:cy="73.40077"
+     inkscape:window-width="2560"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <sodipodi:guide
+       position="88.900005,50.800002"
+       orientation="1,0"
+       id="guide3781" />
+    <sodipodi:guide
+       position="83.900006,5.0000009"
+       orientation="0,-1"
+       id="guide4372" />
+    <sodipodi:guide
+       position="5.0000003,45.800001"
+       orientation="0,-1"
+       id="guide4374" />
+    <sodipodi:guide
+       position="5.0000003,48.300001"
+       orientation="1,0"
+       id="guide4376" />
+    <sodipodi:guide
+       position="172.80001,5.0000008"
+       orientation="1,0"
+       id="guide4378" />
+    <sodipodi:guide
+       position="83.900006,5.0000008"
+       orientation="1,0"
+       id="guide4620" />
+    <sodipodi:guide
+       position="93.900007,5.0000008"
+       orientation="1,0"
+       id="guide4622" />
+  </sodipodi:namedview>
+  <defs
+     id="defs3439" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:5.64444px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       x="11.370666"
+       y="60.380119"
+       id="theme"><tspan
+         sodipodi:role="line"
+         id="tspan6918"
+         style="stroke-width:0.264583"
+         x="11.370666"
+         y="60.380119">Bash</tspan></text>
+  </g>
+</svg>

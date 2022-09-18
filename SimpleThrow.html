@@ -1,0 +1,197 @@
+<html>
+	<head>
+		<title>--</title>
+		<script>var exports = {};</script>
+		<script src="require.js" ></script>
+		
+		<script>
+		
+var CardSide 			= null;
+var CardSegTemplate 	= null;
+var PageSettings 		= null;
+var DOMLoc 				= null;
+var SVGUtils			= null;
+var CardApp				= null;
+var app					= null;
+
+
+window.onload = 
+	function()
+	{
+	require(
+		["CardSide", "CardSegTemplate", "PageSettings", "DOMLoc", "SVGUtils", "CardApp"], 
+		function(modCardSide, modCardSegTemplate, modPageSettings, modDOMLoc, modSVGUtils, modCardApp)
+		{
+			CardSide 		= modCardSide.CardSide;
+			CardSegTemplate = modCardSegTemplate.CardSegTemplate;
+			PageSettings 	= modPageSettings.PageSettings;
+			DOMLoc 			= modDOMLoc.DOMLoc;
+			SVGUtils		= modSVGUtils.SVGUtils;
+			CardApp			= modCardApp.CardApp;
+			
+			app = new CardApp();
+			app.InitializeDownloadAssets();
+		});
+	}
+		</script>
+	</head>
+	<body>
+		<div style="max-width:500px;margin:auto">
+			<div id="dropzone" ondrop="ondropfile(event);" ondragover="ondragfile(event);" style="width:100%;background-color:gray;text-align:center;padding: 45px 0">Drop in here!</div>
+			Added Elements
+			<table id="listing">
+			</table>
+			<input type="checkbox" id="cbLined">Lined</input>
+			<button style="width:100%;height:50px" id="btnAction" onclick="Compile();">Convert</button>
+			<button style="width:100%" id="btnSort" onclick="AlphaSortCards();">Alpha Sort</button>
+			<button style="width:100%" id="btnAction" onclick="ClearCards();">Clear</button>
+		</div>
+	</body>
+	<script>
+
+
+
+function ondropfile(evt)
+{
+	console.log('File(s) dropped');
+	// Prevent default behavior (Prevent file from being opened)
+	evt.preventDefault();
+	
+	if (evt.dataTransfer.items) 
+	{
+		// Use DataTransferItemList interface to access the file(s)
+		for (var i = 0; i < evt.dataTransfer.items.length; i++) 
+		{
+			// If dropped items aren't files, reject them
+			if (evt.dataTransfer.items[i].kind === 'file') 
+			{
+				var file = evt.dataTransfer.items[i].getAsFile();
+				if(!file)
+					continue;
+				
+				console.log('... file[' + i + '].name = ' + file.name);
+				ReadSVGFile(file.name, file);
+			}
+		}
+	} 
+	else 
+	{
+		// Use DataTransfer interface to access the file(s)
+		for (var i = 0; i < evt.dataTransfer.files.length; i++) 
+		{
+			console.log('... file[' + i + '].name = ' + evt.dataTransfer.files[i].name);
+			ReadSVGFile(evt.dataTransfer.files[i].name, evt.dataTransfer.files[i]);
+		}
+	}
+}
+
+function ondragfile(evt)
+{
+	console.log('File(s) in drop zone');
+
+	// Prevent default behavior (Prevent file from being opened)
+	evt.preventDefault();
+}
+
+let templates = [];
+
+function ReadSVGFile(filename, svgFile)
+{
+	let fname = filename;
+	var reader = new FileReader();
+	reader.readAsText(svgFile, "UTF-8");
+	reader.onload = function(evt)
+	{
+		let cardPairQA = app.ParseImportedCard(evt.target.result);
+		templates.push([fname, cardPairQA]);
+		RebuildListing();
+	}
+	reader.onerror = function(evt)
+	{
+		alert("error reading SVG");
+	}
+}
+
+function ClearListing()
+{
+	let lstTable = document.getElementById("listing");
+	lstTable.innerHTML = "";
+}
+
+function RebuildListing()
+{
+	ClearListing();
+	for(let i = 0; i < templates.length; ++i)
+	{
+		let lstTable = document.getElementById("listing");
+		let newtr = document.createElement("tr");
+		newtr.innerHTML = "<td>" + templates[i][0] + "</td>";
+		lstTable.appendChild(newtr);
+	}
+}
+
+function ClearCards()
+{
+	templates = [];
+	ClearListing();
+}
+
+function AlphaSortCards()
+{
+	// Lexical sorting
+	templates = 
+		templates.sort(
+			function(a, b) 
+			{ 
+				return a[0].localeCompare(b[0]); 
+			});
+
+	RebuildListing();
+}
+
+function Compile()
+{
+	let genSVGs = app.GeneratePages( templates);
+	let merged = CardApp.MergeDocumentsIntoString(genSVGs);
+	var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() 
+	{
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) 
+		{   // XMLHttpRequest.DONE == 4
+           if (xmlhttp.status == 200) 
+		   {
+				console.log(xmlhttp.response);
+				// https://www.alexhadik.com/writing/xhr-file-download/
+				
+				var blob = new Blob([this.response], {type: 'application/octet-stream'});
+				CardApp.DoDownload("Flashcard.pdf", blob);
+           }
+           else if (xmlhttp.status == 400) { alert('There was an error 400'); }
+           else  { alert('something else other than 200 was returned'); }
+        }
+    };
+	
+	xmlhttp.responseType = "blob";
+    xmlhttp.open("POST", "PDFConversion.php", true);
+	xmlhttp.setRequestHeader("Content-Type", "text/html; charset=utf-8");
+    xmlhttp.send(merged);
+}
+
+
+
+function DownloadStringAsFile(strVal) 
+{
+	var test = document.getElementById("test");
+	var element = document.createElement('a');
+	element.setAttribute(
+		'href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(strVal));
+	element.setAttribute('download', "cardsTest.svg");
+	element.style.display = 'none'; 
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+}
+
+	</script>
+</html>

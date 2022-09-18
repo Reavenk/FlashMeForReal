@@ -1,0 +1,231 @@
+<html>
+	<head>Yo</head>
+	<body>
+		<div id="test"></div>
+	</body>
+	<script src="SVGUtils.js"></script>
+	<script src="CardSegTemplate.js"></script>
+	<script src="CardSession.js"></script>
+	<script src="CardSet.js"></script>
+	<script src="PagePair.js"></script>
+	<script src="PageSet.js"></script>
+	
+<script>
+
+const cardWidth = 88.900005;
+const cardHeight = 50.800002;
+
+const A4PageOrigX = 19.049999;
+const A4PageOrigY = 12.700019;
+/*	
+class CardParse
+{
+  constructor(layer) 
+  {
+	
+	let themeNode = layer.children["theme"];
+	let themeStr = themeNode.textContent;
+	
+	let theme = themeStr;
+	let left = [];
+	let right = [];
+	
+	for( let i = 0; i < layer.childElementCount; ++i)
+	{
+		let childNode = layer.children[i];
+		if(childNode == themeNode)
+			continue;
+			
+		let refPt = GetNodeRefPt(childNode);
+		let xpos = refPt[0];
+		
+		// A flashcard content SVG should be twice the length
+		// of a flashcard, because the left will have the question,
+		// the the right will have the answer.
+		if(xpos < cardWidth)
+			this.qSide.push(childNode);
+		else
+			this.aSide.push(childNode);
+	}
+  }
+  
+  centerAnswer()
+  {
+	this.moveAnswer([-cardWidth, 0]);
+  }
+  
+  moveQuestion(v2)
+  {
+	for(let i = 0; i < this.qSide.length; ++i)
+		MoveNode(this.qSide[i], v2);
+  }
+  
+  moveAnswer(v2)
+  {
+	for(let i = 0; i < this.aSide.length; ++i)
+		MoveNode(this.aSide[i], v2);
+  }
+}
+*/
+
+function GenerateXMLDocument(template, inserts)
+{
+	let docu = null;
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() 
+	{
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) 
+		{   // XMLHttpRequest.DONE == 4
+           if (xmlhttp.status == 200) 
+		   {
+				//document.getElementById("test").innerHTML = xmlhttp.responseText;
+			   
+				let parser = new DOMParser();
+				let xmlDoc = parser.parseFromString(xmlhttp.responseText, "text/xml");
+				
+				let contentLayer = xmlDoc.rootElement.children["layer1"];
+				
+				let modifiedSVG = xmlDoc.documentElement.outerHTML;
+				document.getElementById("test").innerHTML = modifiedSVG;
+				
+				for(let i = 0; i < inserts.length; ++i)
+				{
+					// Only a 2x5 grid can fit. If we're trying 
+					// to cram more, we have an issue
+					if( i >= 10)
+						break;
+						
+					let r = Math.floor(i / 2);
+					let c = (i % 2);
+					
+					LoadCardIntoPage(
+						xmlDoc, 
+						contentLayer, 
+						inserts[i], 
+						[
+							A4PageOrigX + c * cardWidth,
+							A4PageOrigY + r * cardHeight
+						]);
+				}
+           }
+           else if (xmlhttp.status == 400) 
+		   {
+              alert('There was an error 400');
+           }
+           else 
+		   {
+               alert('something else other than 200 was returned');
+           }
+        }
+    };
+
+    xmlhttp.open("GET", template, true);
+    xmlhttp.send();
+}
+
+function LoadCardIntoPage(parentDoc, parentLayer, url, coord)
+{
+	let docu = null;
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() 
+	{
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) 
+		{   // XMLHttpRequest.DONE == 4
+           if (xmlhttp.status == 200) 
+		   {
+				//document.getElementById("test").innerHTML = xmlhttp.responseText;
+			   
+				let parser = new DOMParser();
+				let xmlDoc = parser.parseFromString(xmlhttp.responseText, "text/xml");
+				let contentLayer = xmlDoc.rootElement.children["layer1"];
+				let cp = new CardParse(contentLayer);
+				cp.centerAnswer();
+				cp.moveQuestion(coord);
+			
+				for(let i = 0; i < cp.qSide.length; ++i)
+				{
+					//parentLayer.insertBefore( cp.qSide[i].cloneNode(true) ,null);
+					parentLayer.insertBefore( parentDoc.importNode(cp.qSide[i], true), null);
+				}
+				
+				let modifiedSVG = parentDoc.documentElement.outerHTML;
+				document.getElementById("test").innerHTML = modifiedSVG;
+				
+           }
+           else if (xmlhttp.status == 400) 
+		   {
+              alert('There was an error 400');
+           }
+           else 
+		   {
+               alert('something else other than 200 was returned');
+           }
+        }
+    };
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function loadXMLDoc() 
+{
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() 
+	{
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) 
+		{   // XMLHttpRequest.DONE == 4
+           if (xmlhttp.status == 200) 
+		   {
+				//document.getElementById("test").innerHTML = xmlhttp.responseText;
+			   
+				let parser = new DOMParser();
+				let xmlDoc = parser.parseFromString(xmlhttp.responseText, "text/xml");
+				
+				let cards = new CardSegTemplate(xmlDoc, cardWidth);
+				
+           }
+           else if (xmlhttp.status == 400) 
+		   {
+              alert('There was an error 400');
+           }
+           else 
+		   {
+               alert('something else other than 200 was returned');
+           }
+        }
+    };
+
+    xmlhttp.open("GET", "BigO/BigO_Final01.svg", true);
+    xmlhttp.send();
+}
+loadXMLDoc();
+//GenerateXMLDocument(
+//	"BlankDocument.svg", 
+//	[
+//		"BigO/BigO_Final01.svg", 
+//		"BigO/BigO_Larger02.svg", 
+//		"BigO/BigO_Name_LogLogN_A.svg", 
+//		"BigO/BigO_Name_N2_A.svg"
+//	]);
+	</script>
+	
+	<form>
+		<input type="button" value='Download' onclick="DownloadFile()"></input>
+	<form>
+	
+	<script>
+		function DownloadFile() 
+		{
+			var test = document.getElementById("test");
+			var element = document.createElement('a');
+			element.setAttribute(
+				'href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(test.innerHTML));
+			element.setAttribute('download', "cardsTest.svg");
+			element.style.display = 'none'; 
+			document.body.appendChild(element);
+			element.click();
+			document.body.removeChild(element);
+		}
+	</script>
+</html>
